@@ -16,8 +16,11 @@ func main() {
 
 	host := os.Getenv("CHAT_HOST")
 	port := os.Getenv("CHAT_PORT")
-	srv := newServer(host + ":" + port)
+	if host == "" || port == "" {
+		logrus.Fatalf("incorrect address to start the server")
+	}
 
+	srv := newServer(host + ":" + port)
 	go func() {
 		if err := srv.start(); err != nil {
 			logrus.Errorf("failed to start server: %s", err.Error())
