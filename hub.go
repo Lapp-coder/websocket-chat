@@ -1,5 +1,6 @@
 package main
 
+// hub является центральным узлом (чатом), который обрабатывает все соединения
 type hub struct {
 	connections map[*connection]struct{}
 	broadcast   chan []byte
@@ -16,7 +17,8 @@ func newHub() *hub {
 	}
 }
 
-func (h *hub) run() {
+// listen прослушивает новые соединения, закрытые соединения и сообщения из канала broadcast
+func (h *hub) listen() {
 	for {
 		select {
 		case conn := <-h.register:

@@ -42,6 +42,6 @@ func (h *handler) chat(w http.ResponseWriter, r *http.Request) {
 		conn.hub.unregister <- conn
 	}()
 
-	go conn.write()
-	conn.read()
+	go conn.writeMessages()
+	conn.readMessages()
 }

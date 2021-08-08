@@ -16,7 +16,7 @@ func newConnection(ws *websocket.Conn, hub *hub) *connection {
 	}
 }
 
-func (c *connection) read() {
+func (c *connection) readMessages() {
 	for {
 		_, message, err := c.ws.ReadMessage()
 		if err != nil {
@@ -28,7 +28,7 @@ func (c *connection) read() {
 	c.ws.Close()
 }
 
-func (c *connection) write() {
+func (c *connection) writeMessages() {
 	for message := range c.send {
 		if err := c.ws.WriteMessage(websocket.TextMessage, message); err != nil {
 			break
