@@ -16,7 +16,7 @@ func main() {
 
 	host := os.Getenv("CHAT_HOST")
 	port := os.Getenv("CHAT_PORT")
-	srv := newServer(host, port)
+	srv := newServer(host + ":" + port)
 
 	go func() {
 		if err := srv.start(); err != nil {
