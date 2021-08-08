@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/websocket"
+	"html/template"
 	"net/http"
 )
 
@@ -9,6 +10,8 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 }
+
+var indexTemplate *template.Template
 
 type handler struct {
 	hub *hub
@@ -24,7 +27,7 @@ func (h *handler) initRoutes() {
 }
 
 func (h *handler) index(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "index.html")
+	indexTemplate.Execute(w, r.Host)
 }
 
 func (h *handler) chat(w http.ResponseWriter, r *http.Request) {

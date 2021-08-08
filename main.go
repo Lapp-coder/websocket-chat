@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"github.com/sirupsen/logrus"
+	"html/template"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 func main() {
+	indexTemplate = template.Must(template.ParseFiles("index.html"))
 	hub := newHub()
 	handler := newHandler(hub)
 	handler.initRoutes()

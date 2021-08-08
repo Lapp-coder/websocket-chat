@@ -28,7 +28,7 @@
                 });
 
                 if (window["WebSocket"]) {
-                    conn = new WebSocket("ws://localhost:8080/chat");
+                    conn = new WebSocket("ws://{{$}}/chat");
                     conn.onclose = function(evt) {
                         appendLog($("<div><b>Соединение закрыто.</b></div>"))
                     }
