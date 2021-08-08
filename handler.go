@@ -19,7 +19,12 @@ func newHandler(hub *hub) *handler {
 }
 
 func (h *handler) initRoutes() {
+	http.HandleFunc("/", h.index)
 	http.HandleFunc("/chat", h.chat)
+}
+
+func (h *handler) index(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "index.html")
 }
 
 func (h *handler) chat(w http.ResponseWriter, r *http.Request) {
