@@ -8,8 +8,8 @@ type connection struct {
 	hub  *hub
 }
 
-func newConnection(ws *websocket.Conn, hub *hub) connection {
-	return connection{
+func newConnection(ws *websocket.Conn, hub *hub) *connection {
+	return &connection{
 		ws:   ws,
 		send: make(chan []byte, 256),
 		hub:  hub,

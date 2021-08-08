@@ -10,7 +10,7 @@ import (
 
 func main() {
 	hub := newHub()
-	handler := newHandler(&hub)
+	handler := newHandler(hub)
 	handler.initRoutes()
 	go hub.run()
 
