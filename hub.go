@@ -7,8 +7,8 @@ type hub struct {
 	unregister  chan *connection
 }
 
-func newHub() hub {
-	return hub{
+func newHub() *hub {
+	return &hub{
 		connections: make(map[*connection]struct{}),
 		broadcast:   make(chan []byte),
 		register:    make(chan *connection),

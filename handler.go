@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/websocket"
 	"net/http"
 )
@@ -20,12 +19,7 @@ func newHandler(hub *hub) *handler {
 }
 
 func (h *handler) initRoutes() {
-	http.HandleFunc("/", h.index)
 	http.HandleFunc("/chat", h.chat)
-}
-
-func (h *handler) index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<h1>Chat on websockets</h1>")
 }
 
 func (h *handler) chat(w http.ResponseWriter, r *http.Request) {
@@ -35,9 +29,9 @@ func (h *handler) chat(w http.ResponseWriter, r *http.Request) {
 	}
 
 	conn := newConnection(ws, h.hub)
-	conn.hub.register <- &conn
+	conn.hub.register <- conn
 	defer func() {
-		conn.hub.unregister <- &conn
+		conn.hub.unregister <- conn
 	}()
 
 	go conn.write()
