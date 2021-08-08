@@ -9,10 +9,10 @@ type server struct {
 	httpServer *http.Server
 }
 
-func newServer(host, port string) *server {
+func newServer(addr string) *server {
 	return &server{
 		httpServer: &http.Server{
-			Addr: host + ":" + port,
+			Addr: addr,
 		},
 	}
 }
