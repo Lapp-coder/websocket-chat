@@ -11,6 +11,7 @@ FROM alpine:latest
 WORKDIR /opt/
 
 COPY --from=builder /github.com/Lapp-coder/websocket-chat/build/bin/chat .
+COPY --from=builder /github.com/Lapp-coder/websocket-chat/index.html .
 
 EXPOSE 8080
 
