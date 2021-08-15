@@ -27,7 +27,10 @@ func (h *handler) initRoutes() {
 }
 
 func (h *handler) index(w http.ResponseWriter, r *http.Request) {
-	indexTemplate.Execute(w, r.Host)
+	if err := indexTemplate.Execute(w, r.Host); err != nil {
+		http.Error(w, "failed to load a home page", http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *handler) chat(w http.ResponseWriter, r *http.Request) {
