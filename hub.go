@@ -11,7 +11,7 @@ type hub struct {
 func newHub() *hub {
 	return &hub{
 		connections: make(map[*connection]struct{}),
-		broadcast:   make(chan []byte),
+		broadcast:   make(chan []byte, 10000),
 		register:    make(chan *connection),
 		unregister:  make(chan *connection),
 	}
@@ -30,7 +30,12 @@ func (h *hub) listen() {
 			}
 		case message := <-h.broadcast:
 			for conn := range h.connections {
-				conn.send <- message
+				select {
+				case conn.send <- message:
+				default:
+					delete(h.connections, conn)
+					close(conn.send)
+				}
 			}
 		}
 	}
