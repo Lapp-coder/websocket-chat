@@ -28,11 +28,10 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	id := string(msg)
-
 	client := jsonrpc.NewClient(ws.UnderlyingConn())
 	defer client.Close()
 
+	id := string(msg)
 	go getUnreadMessages(id, client)
 
 	fmt.Println(
@@ -56,7 +55,7 @@ func main() {
 			fmt.Println("Ваш id:", id)
 		default:
 			sending := strings.Split(text, " %$4^b ")
-			if len(sending) == 0 {
+			if len(sending) == 0 || len(sending) > 2 {
 				logrus.Error("Неккоректный формат входных данных")
 				continue
 			}
@@ -75,7 +74,9 @@ func getUnreadMessages(id string, client *rpc.Client) {
 		var result *[]string
 		if err := client.Call("Handler.GetMessages", args, &result); err != nil {
 			logrus.Fatal(err)
-		} else if len(*result) != 0 {
+		}
+
+		if len(*result) != 0 {
 			for _, msg := range *result {
 				logrus.Println(msg)
 			}
