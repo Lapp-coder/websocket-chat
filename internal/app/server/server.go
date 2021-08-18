@@ -1,26 +1,26 @@
-package main
+package server
 
 import (
 	"context"
 	"net/http"
 )
 
-type server struct {
+type Server struct {
 	httpServer *http.Server
 }
 
-func newServer(addr string) *server {
-	return &server{
+func NewServer(addr string) *Server {
+	return &Server{
 		httpServer: &http.Server{
 			Addr: addr,
 		},
 	}
 }
 
-func (s *server) start() error {
+func (s *Server) Start() error {
 	return s.httpServer.ListenAndServe()
 }
 
-func (s *server) shutdown(ctx context.Context) error {
+func (s *Server) Shutdown(ctx context.Context) error {
 	return s.httpServer.Shutdown(ctx)
 }

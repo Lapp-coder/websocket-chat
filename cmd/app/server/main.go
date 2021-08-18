@@ -2,19 +2,20 @@ package main
 
 import (
 	"context"
+	"github.com/Lapp-coder/websocket-chat/internal/app/server"
 	"github.com/sirupsen/logrus"
-	"html/template"
+	"net/rpc"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 func main() {
-	indexTemplate = template.Must(template.ParseFiles("index.html"))
-	hub := newHub()
-	handler := newHandler(hub)
-	handler.initRoutes()
-	go hub.listen()
+	hub := server.NewHub()
+	handler := server.NewHandler(hub)
+	rpc.Register(handler)
+	handler.InitRoutes()
+	go hub.Listen()
 
 	host := os.Getenv("CHAT_HOST")
 	port := os.Getenv("CHAT_PORT")
@@ -23,9 +24,9 @@ func main() {
 	}
 
 	// Запуск сервера в go-рутине для его плавной остановки
-	srv := newServer(host + ":" + port)
+	srv := server.NewServer(host + ":" + port)
 	go func() {
-		if err := srv.start(); err != nil {
+		if err := srv.Start(); err != nil {
 			logrus.Errorf("failed to start server: %s", err.Error())
 		}
 	}()
@@ -40,7 +41,7 @@ func main() {
 	logrus.Info("server shutdown")
 
 	// Плавная остановка сервера
-	if err := srv.shutdown(context.Background()); err != nil {
+	if err := srv.Shutdown(context.Background()); err != nil {
 		logrus.Errorf("failed to graceful shutdown server: %s", err.Error())
 	}
 }

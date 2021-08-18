@@ -4,14 +4,13 @@ COPY ./ /github.com/Lapp-coder/websocket-chat
 WORKDIR /github.com/Lapp-coder/websocket-chat
 
 RUN go mod download
-RUN go build -o ./build/bin/chat ./...
+RUN go build -o ./build/.bin/chat ./cmd/app/server/main.go
 
 FROM alpine:latest
 
 WORKDIR /opt/
 
-COPY --from=builder /github.com/Lapp-coder/websocket-chat/build/bin/chat .
-COPY --from=builder /github.com/Lapp-coder/websocket-chat/index.html .
+COPY --from=builder /github.com/Lapp-coder/websocket-chat/build/.bin/chat .
 
 EXPOSE 8080
 
