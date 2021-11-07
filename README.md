@@ -10,9 +10,16 @@
 * Makefile
 
 ### Для запуска сервера используйте следующую команду
-```make docker-build && docker run --name=chat -e CHAT_HOST=<host> -e CHAT_PORT=<port> -p <port>>:<port> --rm websocket-chat```
+```
+make docker-build && docker run --name=chat -e CHAT_HOST=<host> -e CHAT_PORT=<port> -p <port>>:<port> --rm websocket-chat
+```
 
 ### Для запуска сервера с конфигурацией по умолчанию
-```make docker-run```
+```
+make docker-run
+```
 
-#### P.S: Для запуска клиента используйте команду ```make run-client```
+### Для запуска клиента используйте команду 
+```
+make run-client
+```
