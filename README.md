@@ -1,5 +1,5 @@
 # Чат
-[![Release](https://img.shields.io/badge/release-v1.1.1-blue)](https://github.com/Lapp-coder/websocket-chat/releases)
+[![Release](https://img.shields.io/badge/release-v1.1.1-blue)](https://github.com/Lapp-coder/websocket-chat/tags)
 
 ### При создании этого приложения были использованны следующие технологии:
 * Go 1.16.6
