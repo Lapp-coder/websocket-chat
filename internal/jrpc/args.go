@@ -2,7 +2,7 @@ package jrpc
 
 type SendMessageArgs struct {
 	ID      string
-	Ids     string
+	IDs     string
 	Message string
 }
 

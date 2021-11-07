@@ -1,14 +1,14 @@
 package server
 
 import (
-	"errors"
 	"fmt"
-	"github.com/Lapp-coder/websocket-chat/pkg/jrpc"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"net/rpc/jsonrpc"
-	"strconv"
 	"strings"
+
+	"github.com/Lapp-coder/websocket-chat/internal/jrpc"
+	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 )
 
 type Handler struct {
@@ -23,13 +23,10 @@ func (h *Handler) InitRoutes() {
 	http.HandleFunc("/chat", h.chat)
 }
 
-var (
-	upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-	uniqueId int
-)
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
 
 func (h *Handler) chat(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -38,8 +35,7 @@ func (h *Handler) chat(w http.ResponseWriter, r *http.Request) {
 	}
 	defer ws.Close()
 
-	uniqueId++
-	id := strconv.Itoa(uniqueId)
+	id := uuid.NewString()
 	if err = ws.WriteMessage(websocket.TextMessage, []byte(id)); err != nil {
 		return
 	}
@@ -56,23 +52,23 @@ func (h *Handler) chat(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) SendMessage(args *jrpc.SendMessageArgs, result *string) error {
-	switch args.Ids {
+	switch args.IDs {
 	case "*":
 		h.hub.broadcast <- []byte(fmt.Sprintf("%s: %s", args.ID, args.Message))
 	case "echo":
-		conn, ok := h.hub.connections[args.ID]
-		if ok {
+		conn, exists := h.hub.Connection(args.ID)
+		if exists {
 			conn.send <- []byte(args.Message)
 		}
 	default:
-		ids := strings.Split(args.Ids, ", ")
+		ids := strings.Split(args.IDs, ", ")
 		if len(ids) == 0 {
-			return errors.New("ids is empty")
+			return errIDsIsEmpty
 		}
 
 		for _, id := range ids {
-			conn, ok := h.hub.connections[id]
-			if ok {
+			conn, exists := h.hub.Connection(id)
+			if exists {
 				conn.send <- []byte(fmt.Sprintf("%s: %s", args.ID, args.Message))
 			}
 		}

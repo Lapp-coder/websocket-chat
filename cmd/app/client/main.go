@@ -3,13 +3,14 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/Lapp-coder/websocket-chat/pkg/jrpc"
-	"github.com/gorilla/websocket"
-	"github.com/sirupsen/logrus"
 	"net/rpc"
 	"net/rpc/jsonrpc"
 	"os"
 	"strings"
+
+	"github.com/Lapp-coder/websocket-chat/internal/jrpc"
+	"github.com/gorilla/websocket"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -60,7 +61,7 @@ func main() {
 				continue
 			}
 
-			args := jrpc.SendMessageArgs{ID: id, Ids: sending[0], Message: sending[1]}
+			args := jrpc.SendMessageArgs{ID: id, IDs: sending[0], Message: sending[1]}
 			if err = client.Call("Handler.SendMessage", args, nil); err != nil {
 				logrus.Fatal(err)
 			}
