@@ -47,8 +47,7 @@ func main() {
 	`)
 
 	scanner := bufio.NewScanner(os.Stdin)
-	for {
-		scanner.Scan()
+	for scanner.Scan() {
 		text := scanner.Text()
 
 		switch text {
